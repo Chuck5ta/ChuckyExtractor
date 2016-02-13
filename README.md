@@ -18,6 +18,17 @@ MS Windows 7
 **libraries:**
 StormLib 9.20
 
+**How to build:**
+
+At a command prompt (cmd), go to the extractor's root folder. This is where the dbc_extractor.cpp is.
+enter cmake in the terminal.
+
+The Visual Studio solution will now be built.
+
+note: you can build it from anywhere, you just need to direct cmake to the location of the cmakelists file.
+e.g. from the build folder, you would type
+cmake ..
+
 ### REASON FOR BEING
 ---------------
 A means to learn.
