@@ -13,9 +13,11 @@
 
 int main(int argc, char* arg[])
 {
-    // identify build of exe
+    // identify the build of the exe
     
     int iWoWExeBuildNumber = 0;
+
+    HANDLE hMPQArchiveFile;
 
     if ((iWoWExeBuildNumber = getBuildNumber()) != NULL)
     {
@@ -24,12 +26,24 @@ int main(int argc, char* arg[])
 
         // process MPQ file
 
-        HANDLE hMPQArchiveFile;
         if (!SFileOpenArchive("dbc.MPQ", 0, 0, &hMPQArchiveFile))
             std::cout << "Balls, cannot locate the MPQ file!!!" << std::endl << std::endl; 
         else
             std::cout << "Yay, located the the MPQ file!!!" << std::endl << std::endl;
 
+        // go through the archive and list each file
+        SFILE_FIND_DATA pFile;
+        if (SFileFindFirstFile(hMPQArchiveFile, "*.dbc", &pFile, 0))
+        {
+            std::cout << "File: " << pFile.cFileName << std::endl;
+
+            // grab the rest of the dbc files
+
+        }
+        else
+        {
+            std::cout << "PROBLEM! Archive is empty!!! " << std::endl;
+        }
     }
     else // failed to locate the WoW executable
     {
@@ -38,6 +52,10 @@ int main(int argc, char* arg[])
 
     int input = 0;
     std::cin >> input;
+
+    // Cleanup and exit
+    if (hMPQArchiveFile != NULL)
+        CloseHandle(hMPQArchiveFile);
 
     return 0;
 }
