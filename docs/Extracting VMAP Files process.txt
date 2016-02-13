@@ -1,0 +1,20 @@
+
+Process to extract files for VMAP
+=================================
+1) Build a list of MPQ's
+2) Load LiquidTypeTable.dbc into array
+3) Extract WMO
+4) Load MAPS.dbc into array
+5) ParseMapFiles
+6) ExtractGameObjectModels
+
+ParseMapFiles
+=============
+4a) Open WDT File
+4b) Do Something, not sure what
+
+ExtractGameObjectModels
+=======================
+6a) Open GameObjectDisplayInfo.dbc
+6b) Extract found WMO files using ExtractWMO
+6c) or anything which is not a WMO and MDL file using ExtractSingleWMO

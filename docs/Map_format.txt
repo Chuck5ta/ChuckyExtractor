@@ -1,0 +1,63 @@
+Header
+======
+ Identifier:	4 Bytes		=	4d 41 50 53 (MAPS)
+Map Version:	4 Bytes		=	7a 31 2e 33 (z1.3)
+AREA Offset:	4 Bytes		=	28 00 00 00 (40 Bytes)
+  AREA Size:	4 Bytes		=	08 02 00 00 (520 Bytes)
+MHGT Offset:	4 Bytes		=	30 02 00 00 (560 Bytes)
+  MHGT Size:	4 Bytes		=	10 00 00 00 (16 Bytes)
+MLIQ Offset:	4 Bytes		=	40 02 00 00 (576 Bytes)
+  MLIQ Size:	4 Bytes		=	10 00 00 00 (16 Bytes)
+Hole Offset:	4 Bytes		=	50 02 00 00 (591 Bytes)
+  Hole Size:	4 Bytes		=	00 02 00 00 (512 Bytes)
+
+AREA Chunk
+==========
+ Identifier:	4 Bytes		=	41 52 45 41 (AREA)
+       Data:	Area Size - 4
+
+MHGT Chunk
+==========
+ Identifier:	4 Bytes		=	4d 48 47 54 (MHGT)
+       Data:	MHGT Size - 4
+
+MLIQ Chunk
+==========
+ Identifier:	4 Bytes		=	4d 4c 49 51 (MLIQ)
+       Data:	MLIQ Size - 4
+
+
+Hole Chunk
+==========
+       Data:	Hole Size	=	Define flags for chunks with holes
+
+
+Maps are named as the following:-
+0005403.map
+
+000 = Map Id, 0 = Azeroth
+54 = Map Y Chunk Index
+03 = Map X Chunk Index
+
+
+Process to build a map
+======================
+1) Load Maps.dbc into array
+2) Load AreaTable.dbc into Array
+3) Load Liquids.dbc into array
+
+4) Dim ADT_RES as integer = 64
+
+5)  For z = 1 to Maps.count()
+5a) For x = 0 to ADT_RES
+5b) For y = 0 to ADT_RES
+
+6) Attempt to Read "World\\Maps\\" & map_ids[z].name & "\\" & map_ids[z].name & "_" & x & "_" & y & ".adt"
+6a) If read was ok, proceed, otherwise jump to 8
+6b) Set Output as: output_path & "/maps/" & map_ids[z].id.substring(0,3) & y.substring(0,2) & x.substring(0,2) & ".map"
+
+7) convertADT
+
+8) next
+8a) next
+8b) next
