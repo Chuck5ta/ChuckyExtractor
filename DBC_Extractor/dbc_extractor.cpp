@@ -18,6 +18,7 @@ int main(int argc, char* arg[])
     int iWoWExeBuildNumber = 0;
 
     HANDLE hMPQArchiveFile;
+    HANDLE hDBCFile;
 
     if ((iWoWExeBuildNumber = getBuildNumber()) != NULL)
     {
@@ -33,12 +34,16 @@ int main(int argc, char* arg[])
 
         // go through the archive and list each file
         SFILE_FIND_DATA pFile;
-        if (SFileFindFirstFile(hMPQArchiveFile, "*.dbc", &pFile, 0))
+        if ((hDBCFile = SFileFindFirstFile(hMPQArchiveFile, "*.dbc", &pFile, 0)) != NULL)
         {
             std::cout << "File: " << pFile.cFileName << std::endl;
+            std::cout << "=============" << std::endl;
 
             // grab the rest of the dbc files
-
+            while (SFileFindNextFile(hDBCFile, &pFile) != NULL)
+            {
+                std::cout << "File: " << pFile.cFileName << std::endl;
+            }
         }
         else
         {
