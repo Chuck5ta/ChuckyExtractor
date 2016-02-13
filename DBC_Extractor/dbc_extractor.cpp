@@ -66,6 +66,8 @@ int main(int argc, char* arg[])
     // Cleanup and exit
     if (hMPQArchiveFile != NULL)
         CloseHandle(hMPQArchiveFile);
+    if (hDBCFile != NULL)
+        CloseHandle(hDBCFile);
 
     return 0;
 }
