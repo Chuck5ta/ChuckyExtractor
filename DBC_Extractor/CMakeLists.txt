@@ -382,6 +382,6 @@ link_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/StormLib/src
 )
 
-add_executable( dbc_extractor dbc_extractor.cpp )
+add_executable( dbc_extractor dbc_extractor.cpp ExtractorCommon.cpp )
 target_link_libraries(dbc_extractor StormLib)
 

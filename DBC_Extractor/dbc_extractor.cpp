@@ -8,16 +8,36 @@
 
 #include <iostream>
 #include <StormLib.h>
+#include "ExtractorCommon.h"
+
 
 int main(int argc, char* arg[])
 {
-    HANDLE hMpqFile;
-    if (!SFileOpenArchive("dbc.MPQ", 0, 0, &hMpqFile))
-        std::cout << "Balls, cannot locate the MPQ file!!!" << std::endl << std::endl; 
-    else
-        std::cout << "Yay, located the the MPQ file!!!" << std::endl << std::endl;
+    // identify build of exe
+    
+    int iWoWExeBuildNumber = 0;
 
-    std::cin;
+    if ((iWoWExeBuildNumber = getBuildNumber()) != NULL)
+    {
+        // output the build number of the WoW exe
+        std::cout << "Exe build number: " << iWoWExeBuildNumber << std::endl << std::endl;
+
+        // process MPQ file
+
+        HANDLE hMPQArchiveFile;
+        if (!SFileOpenArchive("dbc.MPQ", 0, 0, &hMPQArchiveFile))
+            std::cout << "Balls, cannot locate the MPQ file!!!" << std::endl << std::endl; 
+        else
+            std::cout << "Yay, located the the MPQ file!!!" << std::endl << std::endl;
+
+    }
+    else // failed to locate the WoW executable
+    {
+        std::cout << "WoW exe file could not be found!!!" << std::endl << std::endl;
+    }
+
+    int input = 0;
+    std::cin >> input;
 
     return 0;
 }
