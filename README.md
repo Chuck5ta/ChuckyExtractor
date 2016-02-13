@@ -20,4 +20,4 @@ StormLib 9.20
 
 ### REASON FOR BEING
 ---------------
-A means to learn how.
+A means to learn.
