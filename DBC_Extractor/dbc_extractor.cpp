@@ -18,7 +18,7 @@ int main(int argc, char* arg[])
     int iWoWExeBuildNumber = 0;
 
     HANDLE hMPQArchiveFile;
-    HANDLE hDBCFile;
+    HANDLE hDBCFirstFile;
     HANDLE hDBCNextFile;
     HANDLE hDiskFile;
     SFILE_FIND_DATA pFile;
@@ -28,25 +28,23 @@ int main(int argc, char* arg[])
         // output the build number of the WoW exe
         std::cout << "Exe build number: " << iWoWExeBuildNumber << std::endl << std::endl;
 
-        // process MPQ file
+        // process the dbc MPQ file
 
         if (!SFileOpenArchive("dbc.MPQ", 0, 0, &hMPQArchiveFile))
             std::cout << "Balls, cannot locate the MPQ file!!!" << std::endl << std::endl; 
         else
         {
-            std::cout << "Yay, located the the MPQ file!!!" << std::endl << std::endl;
+            std::cout << "Yay, located the MPQ file!" << std::endl << std::endl;
 
             // go through the archive and list each file
-            if ((hDBCFile = SFileFindFirstFile(hMPQArchiveFile, "*.dbc", &pFile, 0)) != NULL)
+            if ((hDBCFirstFile = SFileFindFirstFile(hMPQArchiveFile, "*.dbc", &pFile, 0)) != NULL)
             {
                 std::cout << "File: " << pFile.szPlainName << std::endl;
                 std::cout << "=============" << std::endl;
                 // open the file
                 if (SFileOpenFileEx(hMPQArchiveFile, pFile.cFileName, 0, &hDBCNextFile))
                 {
-                    std::cout << "Successfully openned file:  " << pFile.szPlainName << std::endl;
-                    std::cout << "Size of file:  " << pFile.dwFileSize << std::endl;
-                    std::cout << "Size of file:  " << SFileGetFileSize(hDBCNextFile, 0) << std::endl;
+                    std::cout << "Successfully openned the first file:  " << pFile.szPlainName << std::endl;
                     // create the file to be written to disk
                     if (hDiskFile = CreateFile(pFile.szPlainName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL))
                     {
@@ -62,13 +60,16 @@ int main(int argc, char* arg[])
                             SFileReadFile(hDBCNextFile, szBuffer, sizeof(szBuffer), &dwBytes, NULL);
                             std::cout << "byte read from file: " << dwBytes << std::endl;
                             if(dwBytes > 0)
-                                WriteFile(hDiskFile, szBuffer, dwBytes, &dwBytes, NULL);
+                                if (WriteFile(hDiskFile, szBuffer, dwBytes, &dwBytes, NULL))
+                                    std::cout << "File extraction successful, file created:  " << pFile.cFileName << std::endl;
+                                else
+                                    std::cout << "Failed to write file to disk:  " << pFile.cFileName << std::endl;
                         }
 
                         // grab the rest of the dbc files
                         // ==============================
 
-                        while (SFileFindNextFile(hDBCFile, &pFile))
+                        while (SFileFindNextFile(hDBCFirstFile, &pFile))
                         {
                             std::cout << "File: " << pFile.cFileName << std::endl;
                             // open the file
@@ -89,14 +90,14 @@ int main(int argc, char* arg[])
                                         if (dwBytes > 0)
                                         {
                                             if(WriteFile(hDiskFile, szBuffer, dwBytes, &dwBytes, NULL))
-                                                std::cout << "successfully created disk file:  " << pFile.cFileName << std::endl;
+                                                std::cout << "File extraction successful, file created:  " << pFile.cFileName << std::endl;
                                             else
-                                                std::cout << "Failed to create disk file:  " << pFile.cFileName << std::endl;
+                                                std::cout << "Failed to write file to disk:  " << pFile.cFileName << std::endl;
                                         }
                                     }
                                 }
                                 else
-                                    std::cout << "Failed to create disk file:  " << pFile.cFileName << std::endl;
+                                    std::cout << "Failed to create disk file HANDLE:  " << pFile.cFileName << std::endl;
                             }
                             else
                                 std::cout << "Failed to open file:  " << pFile.cFileName << std::endl;
@@ -127,8 +128,8 @@ int main(int argc, char* arg[])
     // Cleanup and exit
     if (hMPQArchiveFile != NULL)
         CloseHandle(hMPQArchiveFile);
-    if (hDBCFile != NULL)
-        CloseHandle(hDBCFile);
+    if (hDBCFirstFile != NULL)
+        CloseHandle(hDBCFirstFile);
     if (hDBCNextFile != NULL)
         CloseHandle(hDBCNextFile);
  //   if (hDiskFile != NULL)
