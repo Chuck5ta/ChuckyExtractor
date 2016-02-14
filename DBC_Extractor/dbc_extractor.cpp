@@ -16,11 +16,11 @@
  */
 void processTheDBCMPQFile()
 {
-    HANDLE hMPQArchiveFile;
-    HANDLE hDBCFirstFile;
-    HANDLE hDBCNextFile;
-    HANDLE hDiskFile;
-    SFILE_FIND_DATA pFile;
+    HANDLE hMPQArchiveFile;    // handle to the dbc.MPQ archive
+    HANDLE hDBCFirstFile;      // handle to the first file in the dbc.MPQ archive
+    HANDLE hDBCNextFile;       // handle to each of the archived files after the first file
+    HANDLE hDiskFile;          // handle to the dbc file that will be created on disk
+    SFILE_FIND_DATA pFile;     // a pointer to the current dbc file in the dbc.MPQ archive
 
     // open the MPQ archive, so that we can extract the dbc files
     if (!SFileOpenArchive("dbc.MPQ", 0, 0, &hMPQArchiveFile))
@@ -37,11 +37,13 @@ void processTheDBCMPQFile()
         {
             std::cout << "File: " << pFile.szPlainName << std::endl;
             std::cout << "=============" << std::endl;
-            // open the file in the MPQ archive
+
+            // open the dbc file in the MPQ archive
             if (SFileOpenFileEx(hMPQArchiveFile, pFile.cFileName, 0, &hDBCNextFile))
             {
                 std::cout << "Successfully openned the first file:  " << pFile.szPlainName << std::endl;
-                // create the file to be written to disk
+
+                //  create the file on disk, so that we can write to it
                 if (hDiskFile = CreateFile(pFile.szPlainName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL))
                 {
                     std::cout << "Successfully created disk file handle:  " << pFile.szPlainName << std::endl;
@@ -53,12 +55,12 @@ void processTheDBCMPQFile()
                     // extract the file and write it to disk
                     while (dwBytes > 0)
                     {
-                        // extract the MPQ archive file's contents
+                        // extract the dbc file's contents from the MPQ archive
                         SFileReadFile(hDBCNextFile, szBuffer, sizeof(szBuffer), &dwBytes, NULL);
                         if (dwBytes > 0)
                             // write the contents to the new file on disk
                             if (WriteFile(hDiskFile, szBuffer, dwBytes, &dwBytes, NULL))
-                                std::cout << "File extraction successful, file created:  " << pFile.cFileName << std::endl;
+                                std::cout << "File extraction successful, creating file:  " << pFile.cFileName << std::endl;
                             else
                                 std::cout << "Failed to write file to disk:  " << pFile.cFileName << std::endl;
                     }
@@ -69,7 +71,8 @@ void processTheDBCMPQFile()
                     while (SFileFindNextFile(hDBCFirstFile, &pFile))
                     {
                         std::cout << "File: " << pFile.cFileName << std::endl;
-                        // open the file in the MPQ archive
+
+                        // open the dbc file in the MPQ archive
                         if (SFileOpenFileEx(hMPQArchiveFile, pFile.cFileName, 0, &hDBCNextFile))
                         {
                             std::cout << "Successfully openned file:  " << pFile.cFileName << std::endl;
@@ -81,16 +84,16 @@ void processTheDBCMPQFile()
                                 char  szBuffer[0x10000];
                                 DWORD dwBytes = 1;
 
-                                // extract the file and write it to disk
+                                // extract the dbc file and write it to disk
                                 while (dwBytes > 0)
                                 {
-                                    // extract the MPQ archive file's contents
+                                    // extract the dbc file's contents from the MPQ archive
                                     SFileReadFile(hDBCNextFile, szBuffer, sizeof(szBuffer), &dwBytes, NULL);
                                     if (dwBytes > 0)
                                     {
                                         // write the contents to the new file on disk
                                         if (WriteFile(hDiskFile, szBuffer, dwBytes, &dwBytes, NULL))
-                                            std::cout << "File extraction successful, file created:  " << pFile.cFileName << std::endl;
+                                            std::cout << "File extraction successful, creating file:  " << pFile.cFileName << std::endl;
                                         else
                                             std::cout << "Failed to write file to disk:  " << pFile.cFileName << std::endl;
                                     }
