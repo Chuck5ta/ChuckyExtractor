@@ -17,6 +17,7 @@ MS Windows 7
 
 **libraries:**
 StormLib 9.20
+[http://www.zezula.net/en/mpq/stormlib.html](http://www.zezula.net/en/mpq/stormlib.html)
 
 **How to build:**
 
