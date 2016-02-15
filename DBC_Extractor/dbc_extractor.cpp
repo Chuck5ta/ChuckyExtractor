@@ -6,11 +6,8 @@
  *
  */
 
-#include <iostream>
-#include <StormLib.h>
-#include "ExtractorCommon.h"
-
-
+#include "dbc_extractor.h"
+ 
 /*
  * this function extracts a single DBC file from the dbc.MPQ archive and writes it to the disk
  *
