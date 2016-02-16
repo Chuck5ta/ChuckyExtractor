@@ -9,6 +9,14 @@
 #include <iostream>
 #include <StormLib.h>
 #include "ExtractorCommon.h"
+#include <direct.h>
+
+
+char * pDBCfolder = "./dbc/";
+char * pMAPSfolder = "./maps/";
+char * pVMAPSfolder = "./vmaps/";
+char * pMMAPSfolder = "./mmaps/";
+
 
 
 /*

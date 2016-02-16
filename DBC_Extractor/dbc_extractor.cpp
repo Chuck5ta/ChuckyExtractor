@@ -7,6 +7,7 @@
  */
 
 #include "dbc_extractor.h"
+#include "TypeConversion.h"
  
 /*
  * this function extracts a single DBC file from the dbc.MPQ archive and writes it to the disk
@@ -47,12 +48,15 @@ void processTheDBCMPQFile()
     HANDLE hDiskFile;          // handle to the dbc file that will be created on disk
     SFILE_FIND_DATA pFile;     // a pointer to the current dbc file in the dbc.MPQ archive
 
+    // create the folder for the DBC files
+    mkdir("./dbc");
+
     // open the MPQ archive, so that we can extract the dbc files
     if (!SFileOpenArchive("dbc.MPQ", 0, 0, &hMPQArchiveFile))
         std::cout << "Balls, cannot locate the dbc.MPQ file!!!" << std::endl << std::endl;
     else
     {
-        std::cout << "Yay, located the dbc.MPQ file!" << std::endl << std::endl;
+        std::cout << "Yay, located the MPQ file!" << std::endl << std::endl;
 
         // go through the archive and extract each file
         // ============================================
@@ -68,8 +72,7 @@ void processTheDBCMPQFile()
             {
                 std::cout << "Successfully openned the first file:  " << pFile.szPlainName << std::endl;
 
-                //  create the file on disk, so that we can write to it
-                if (hDiskFile = CreateFile(pFile.szPlainName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL))
+                if (hDiskFile = CreateFile(concatStrings(pDBCfolder, pFile.szPlainName).c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL))
                 {
                     std::cout << "Successfully created the disk file's handle:  " << pFile.szPlainName << std::endl;
 
@@ -88,7 +91,7 @@ void processTheDBCMPQFile()
                         {
                             std::cout << "Successfully openned the file:  " << pFile.cFileName << std::endl;
                             // create the file on disk, so that we can write to it
-                            if (hDiskFile = CreateFile(pFile.szPlainName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL))
+                            if (hDiskFile = CreateFile(concatStrings(pDBCfolder, pFile.szPlainName).c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL))
                             {
                                 std::cout << "Successfully created the disk file's handle:  " << pFile.cFileName << std::endl;
 
@@ -101,26 +104,33 @@ void processTheDBCMPQFile()
                         else
                             std::cout << "Failed to open the archive file:  " << pFile.cFileName << std::endl;
                     }
+                    // Cleanup and exit
+                    if (hDBCNextFile != NULL)
+                        CloseHandle(hDBCNextFile);
+                    if (hDiskFile != NULL)
+                        CloseHandle(hDiskFile);
                 }
                 else
+                {
                     std::cout << "Failed to create the disk file HANDLE:  " << pFile.cFileName << std::endl;
+                }
             }
             else
+            {
                 std::cout << "Failed to open the archived file:  " << pFile.cFileName << std::endl;
+            }
+            if (hDBCFirstFile != NULL)
+                CloseHandle(hDBCFirstFile);
         }
         else
-            std::cout << "PROBLEM! The dbc.MPQ archive is empty!!! " << std::endl;
+        {
+            std::cout << "There were no files of the type found in the archive!!! " << std::endl;
+        }
+        // Cleanup and exit
+        if (hMPQArchiveFile != NULL)
+            CloseHandle(hMPQArchiveFile);
     }
 
-    // Cleanup and exit
-    if (hMPQArchiveFile != NULL)
-        CloseHandle(hMPQArchiveFile);
-    if (hDBCFirstFile != NULL)
-        CloseHandle(hDBCFirstFile);
-    if (hDBCNextFile != NULL)
-        CloseHandle(hDBCNextFile);
-    if (hDiskFile != NULL)
-        CloseHandle(hDiskFile);
 }
 
 int main(int argc, char* arg[])
