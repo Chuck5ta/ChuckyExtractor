@@ -94,19 +94,18 @@ std::string convertToString(DWORD valueToConvert)
 }
 
 /*
-	Convert TCHAR array to string
- */
-std::string convertToString(TCHAR valueToConvert[])
+    Convert char * to string
+*/
+std::string convertToString(char * valueToConvert)
 {
-	std::ostringstream stream;
-	stream << valueToConvert;
-	std::string str = stream.str();
-	return str;
+    std::ostringstream stream;
+    stream << valueToConvert;
+    std::string str = stream.str();
+    return str;
 }
 
 std::string convertToString(HANDLE hwnd)
 {
-	HANDLE  hData;
 	std::stringstream streamData;
 	std::string str;
 	streamData << hwnd;
@@ -218,11 +217,38 @@ std::string convertToHEXLittleEndian_OLD(std::string valueToConvert)
 /*
  * this function concatenates 2 strings of type LPSTR (char *)
  */
-std::string concatStrings(char * lpFirstString, char * lpSecondString)
+std::string concatStrings(char * pFirstString, char * pSecondString)
 {
     char str[80];
-    strcpy(str, lpFirstString);
-    strcat(str, lpSecondString);
+    strcpy(str, pFirstString);
+    strcat(str, pSecondString);
+
+    return convertToString(str);
+}
+
+/*
+* this function concatenates 2 strings of type LPSTR (char *)
+*/
+std::string concatStrings(std::string sFirstString, char * pSecondString)
+{
+    char str[80];
+    strcpy(str, sFirstString.c_str());
+    strcat(str, pSecondString);
+
+    return convertToString(str);
+}
+
+/*
+* this function concatenates 3 strings of type LPSTR (char *)
+*/
+std::string concatStrings(char * pFirstString, std::string sSecondString, char * pThirdString)
+{
+    char str[80];
+    strcpy(str, pFirstString);
+    strcat(str, sSecondString.c_str());
+
+    strcpy(str, sSecondString.c_str());
+    strcat(str, pThirdString);
 
     return convertToString(str);
 }

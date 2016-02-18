@@ -12,8 +12,8 @@
 FILE* openWoWExe()
 {
     FILE *pFile;
-    const char* ExeFileName[] = { "WoW.exe", "Wow.exe", "wow.exe" };
-    int iExeSpelling = 3; ///> WoW.exe (Classic, CATA), Wow.exe (TBC, MoP, WoD), wow.exe (WOTLK)
+    const char* ExeFileName[] = { "WoW.exe", "Wow.exe", "wow.exe", "Wow-64.exe" }; 
+    int iExeSpelling = 4; ///> WoW.exe (Classic, CATA), Wow.exe (TBC, MoP, WoD), wow.exe (WOTLK), Wow-64.exe (MoP and WoD)
 
     /// loop through all possible file names
     for (int iFileCount = 0; iFileCount < iExeSpelling; iFileCount++)
@@ -45,22 +45,20 @@ int getBuildNumber()
     bool bBuildFound = false;
 
     /// hex values of the text/bytes we need to search for:
-    /// WoW [Rel
-    int iHexValue_W = 0x57;
-    int iHexValue_o = 0x6F;
-    int iHexValue_space = 0x20;
-    int iHexValue_OpeningBracket = 0x5B; // [ 
-    int iHexValue_R = 0x52;
-    int iHexValue_e = 0x65;
-    int iHexValue_l = 0x6C;
+    /// ] Build
+    int iHexValue_ClosingBracket = 0x5D; // ]
+    int iHexValue_space          = 0x20;
+    int iHexValue_B              = 0x42;
+    int iHexValue_u              = 0x75;
+    int iHexValue_i              = 0x69;
+    int iHexValue_l              = 0x6C;
+    int iHexValue_d              = 0x64;
     
     /// buffers used for working on the file's bytes
     unsigned char byteSearchBuffer[1]; ///< used for reading in a single character, ready to be 
-                                       ///< tested for the required text we are searching for: "WoW [Rel"
-    unsigned char jumpBytesBuffer[128]; ///< used for skipping past the bytes from the file's start
+                                       ///< tested for the required text we are searching for: "] Build"
+    unsigned char jumpBytesBuffer[256]; ///< used for skipping past the bytes from the file's start
                                         ///< to the base # area, before we start searching for the base #, for faster processing
-    unsigned char jumpBytesBuffer2[12]; ///< used for skipping past the bytes between the text being
-                                        ///< searched for and the Base #, so that we can then get at the Base #
     unsigned char buildNumber[6]; ///< stored here prior to conversion to an integer
 
     FILE *pFile;
@@ -68,42 +66,42 @@ int getBuildNumber()
         return 0; ///> faled to locate exe file
     
     /// jump over as much of the file as possible, before we start searching for the base #
-    for (int i = 0; i < 3300; i++)
+    for (int i = 0; i < 1650; i++)
         fread(jumpBytesBuffer, sizeof(jumpBytesBuffer), 1, pFile);
 
     /// Search for the build #
     while (!bBuildFound && fread(byteSearchBuffer, 1, 1, pFile))
     {
-        /// find W
-        if (byteSearchBuffer[0] == 0x57)
+        /// find ]
+        if (byteSearchBuffer[0] == iHexValue_ClosingBracket)
         {
-            /// is the next byte an o
+            /// is the next byte a space
             fread(byteSearchBuffer, 1, 1, pFile);
-            if (byteSearchBuffer[0] == iHexValue_o)
+            if (byteSearchBuffer[0] == iHexValue_space)
             {
-                /// is the next byte a W
+                /// is the next byte a B
                 fread(byteSearchBuffer, 1, 1, pFile);
-                if (byteSearchBuffer[0] == iHexValue_W)
+                if (byteSearchBuffer[0] == iHexValue_B)
                 {
-                    /// is the next byte a space
+                    /// is the next byte a u
                     fread(byteSearchBuffer, 1, 1, pFile);
-                    if (byteSearchBuffer[0] == iHexValue_space)
+                    if (byteSearchBuffer[0] == iHexValue_u)
                     {
-                        /// is the next byte an open square bracket
+                        /// is the next byte an i
                         fread(byteSearchBuffer, 1, 1, pFile);
-                        if (byteSearchBuffer[0] == iHexValue_OpeningBracket)
+                        if (byteSearchBuffer[0] == iHexValue_i)
                         {
-                            /// is the next byte an R
+                            /// is the next byte an l
                             fread(byteSearchBuffer, 1, 1, pFile);
-                            if (byteSearchBuffer[0] == iHexValue_R)
+                            if (byteSearchBuffer[0] == iHexValue_l)
                             {
-                                /// is the next byte an e
+                                /// is the next byte a d
                                 fread(byteSearchBuffer, 1, 1, pFile);
-                                if (byteSearchBuffer[0] == iHexValue_e)
+                                if (byteSearchBuffer[0] == iHexValue_d)
                                 {
-                                    /// is the next byte an l
+                                    /// is the next byte a space
                                     fread(byteSearchBuffer, 1, 1, pFile);
-                                    if (byteSearchBuffer[0] == iHexValue_l)
+                                    if (byteSearchBuffer[0] == iHexValue_space)
                                         bBuildFound = true; ///< we are at the Build # area
                                 }
                             }
@@ -121,9 +119,6 @@ int getBuildNumber()
         return 0; ///< we reached the end of the file without locating the build #, exit funcion
     }
 
-    /// grab data leading up to the build #
-    fread(jumpBytesBuffer2, sizeof(jumpBytesBuffer2), 1, pFile);
-
     /// grab the bytes containing the number
     fread(buildNumber, sizeof(buildNumber), 1, pFile);
 
@@ -140,3 +135,86 @@ int getBuildNumber()
 
     return iBuild; ///< build # found
 }
+
+/**
+*  This function looks up the Core Version based in the found build Number
+*
+*  @RETURN iCoreNumber the build number of the WoW executable, or -1 if failed
+*/
+int getCoreNumber()
+{
+    return getCoreNumberFromBuild(getBuildNumber());
+}
+
+/**
+*  This function looks up the Core Version based in the found build Number
+*
+*  @PARAM iBuildNumber is the build number of the WoW executable
+*  @RETURN iCoreNumber the build number of the WoW executable, or -1 if failed
+*/
+int getCoreNumberFromBuild(int iBuildNumber)
+{
+    switch (iBuildNumber)
+    {
+    case 5875:  //CLASSIC
+    case 6005:  //CLASSIC
+    case 6141:  //CLASSIC
+        return CLIENT_CLASSIC;
+        break;
+    case 8606:  //TBC
+        return CLIENT_TBC;
+        break;
+    case 12340: //WOTLK
+        return CLIENT_WOTLK;
+        break;
+    case 15595: //CATA
+        return CLIENT_CATA;
+        break;
+    case 18414: //MOP
+        return CLIENT_MOP;
+        break;
+    case 20726: //WOD
+        return CLIENT_WOD;
+        break;
+    case 20740: //LEGION ALPHA
+        return CLIENT_LEGION;
+        break;
+
+    default:
+        return -1;
+        break;
+    }
+}
+
+/**
+ * This function retrieves the locale of the WoW client 
+ * e.g. enGB, enRU, enCN, enUS, etc
+ *
+ * @RETURN sLocale the locale of the game client
+ */
+std::string getLocale()
+{
+    std::string sLocale = "";
+    /// open the Config.wtf file
+    std::ifstream configFile("WTF/Config.wtf");
+    std::string line;
+    while (std::getline(configFile, line))
+    {
+        // look for the locale - search for "locale"
+        int iLocaleFound = line.find("locale");
+        if (iLocaleFound != std::string::npos)
+        {
+            /// locale line found
+            /// grab the locale itself
+            sLocale = line.substr(iLocaleFound + 8, 4);
+            std::cout << "Locale found: " << sLocale << std::endl << std::endl;
+            break;
+        }
+    }
+
+    configFile.close();
+
+    return sLocale;
+}
+
+

@@ -26,8 +26,10 @@ DWORD convertToDWORD(std::string valueToConvert);
 
 // Convert DWORD to string
 std::string convertToString(DWORD valueToConvert);
-// Convert TCHAR to string
-std::string convertToString(TCHAR  valueToConvert[]);
+// Convert TCHAR to string - this is a char *
+//std::string convertToString(TCHAR  valueToConvert[]);
+// Convert char * to string
+std::string convertToString(char * valueToConvert);
 // Convert LPVOID to string
 std::string convertToString(LPVOID valueToConvert);
 // Convert HANDLE to string
@@ -65,4 +67,7 @@ std::string convertToHEXLittleEndian(std::string valueToConvert);
 * this function concatenates 2 strings of type LPSTR (char *)
 * use c_str() to convert the returned value back into a char *, if need be
 */
-std::string concatStrings(char * lpFirstString, char * lpSecondString);
+std::string concatStrings(char * pFirstString, char * pSecondString);
+std::string concatStrings(std::string sFirstString, char * pSecondString);
+
+std::string concatStrings(char * pFirstString, std::string sSecondString, char * pThirdString);

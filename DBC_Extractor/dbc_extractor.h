@@ -17,6 +17,10 @@ char * pMAPSfolder = "./maps/";
 char * pVMAPSfolder = "./vmaps/";
 char * pMMAPSfolder = "./mmaps/";
 
+// array of folder paths
+
+// Classic
+
 
 
 /*
@@ -33,6 +37,10 @@ void extractDBCFile(HANDLE hCurrentDBCFile, HANDLE hDiskFile, SFILE_FIND_DATA pF
  * This function extracts the DBC files from the dbc.MPQ archive and writes them to the disk as individual files.
  */
 void processTheDBCMPQFile();
+
+void processMPQFile(std::string sFileType, std::string sDestinationFolder, std::string sLocale, std::string sMPQFileName);
+
+void processMPQFiles(int core, std::string sLocale);
 
 
 
