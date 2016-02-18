@@ -33,12 +33,14 @@ char * pMMAPSfolder = "./mmaps/";
  */
 void extractDBCFile(HANDLE hCurrentDBCFile, HANDLE hDiskFile, SFILE_FIND_DATA pFile);
 
+void addPatchFiles(int iCore, HANDLE hMPQArchiveFile, std::string sLocale);
+
 /*
  * This function extracts the DBC files from the dbc.MPQ archive and writes them to the disk as individual files.
  */
 void processTheDBCMPQFile();
 
-void processMPQFile(std::string sFileType, std::string sDestinationFolder, std::string sLocale, std::string sMPQFileName);
+void processMPQFile(int iCore, std::string sFileType, std::string sDestinationFolder, std::string sLocale, std::string sMPQFileName);
 
 void processMPQFiles(int core, std::string sLocale);
 

@@ -1,7 +1,6 @@
 # Chucky Extractor
 
-DBC file extractor for WoW Classic, TBC, and WOTLK
-This does not support patched files (as yet), therefore is of no use on Cata or above.
+DBC file extractor for WoW Classic, TBC, and WOTLK, CATA, and Mop
 
 Author: Chuck E (aka Chucksta)</br>
 [getMaNGOS](https://www.getmangos.eu) developer
@@ -25,7 +24,7 @@ MS Windows 7
 StormLib 9.20</br>
 [http://www.zezula.net/en/mpq/stormlib.html](http://www.zezula.net/en/mpq/stormlib.html)
 
-**How to build:**
+**How to create the VS project:**
 
 At a command prompt (cmd), go to the extractor's root folder. This is where the dbc_extractor.cpp file is, and enter:</br>
 **cmake**

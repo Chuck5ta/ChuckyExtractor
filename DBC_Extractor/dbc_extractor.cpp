@@ -133,6 +133,139 @@ void processTheDBCMPQFile(std::string sLocale)
 
 }
 
+void addPatchFiles(int iCore, HANDLE hMPQArchiveFile, std::string sLocale)
+{
+    std::cout << "Adding patch files, please wait" << std::endl << std::endl;
+
+    if (iCore == CLIENT_CLASSIC)
+    {
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, "./Data/patch.MPQ", "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "patch.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, "./Data/patch-2.MPQ", "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "patch-2.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+    }
+
+    if (iCore >= CLIENT_TBC && iCore <= CLIENT_WOTLK)
+    {
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/patch-" + sLocale + ".MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "patch.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/patch-" + sLocale + "-2.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "patch-2.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+    }
+
+    if (iCore == CLIENT_WOTLK)
+    {
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/patch-" + sLocale + "-3.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "patch-3.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+    }
+
+    if (iCore == CLIENT_CATA)
+    {
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-15211.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-15211.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-15354.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-15354.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-15595.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-15595.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+
+    }
+
+    if (iCore == CLIENT_MOP)
+    {
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16016.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16016.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16048.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16048.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16057.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16057.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16309.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16309.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16357.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16357.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16516.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16516.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16650.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16650.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16844.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16844.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-16965.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-16965.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17116.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17116.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17266.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17266.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17325.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17325.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17345.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17345.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17538.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17538.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17645.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17645.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17688.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17688.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-17898.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-17898.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+        if (!SFileOpenPatchArchive(hMPQArchiveFile, ("./Data/" + sLocale + "/wow-update-" + sLocale + "-18273.MPQ").c_str(), "", NULL))
+        {
+            std::cout << "Failed to add patch archive: " << "wow-update-???-18273.MPQ" << " file!!!" << std::endl << std::endl;
+        }
+
+    }
+
+}
 
 /** 
  * This function
@@ -140,7 +273,7 @@ void processTheDBCMPQFile(std::string sLocale)
  * @PARAM sFileType is the file to search for (dbc, adt, wmo, etc.)
  *
  */
-void processMPQFile(std::string sFileType, std::string sDestinationFolder, std::string sLocale, std::string sMPQFileName)
+void processMPQFile(int iCore, std::string sFileType, std::string sDestinationFolder, std::string sLocale, std::string sMPQFileName)
 {
     HANDLE hMPQArchiveFile;    // handle to the dbc.MPQ archive
     HANDLE hDBCFirstFile;      // handle to the first file in the dbc.MPQ archive
@@ -149,11 +282,14 @@ void processMPQFile(std::string sFileType, std::string sDestinationFolder, std::
     SFILE_FIND_DATA pFile;     // a pointer to the current dbc file in the dbc.MPQ archive
 
     // open the MPQ archive, so that we can extract the dbc files
-    if (!SFileOpenArchive(sMPQFileName.c_str(), 0, 0, &hMPQArchiveFile))
+    if (!SFileOpenArchive(sMPQFileName.c_str(), 0, MPQ_OPEN_READ_ONLY, &hMPQArchiveFile))
         std::cout << "Balls, cannot locate the " << sMPQFileName << " file!!!" << std::endl << std::endl;
     else
     {
         std::cout << "Yay, located the MPQ file!" << std::endl << std::endl;
+
+        // add patch files
+        addPatchFiles(iCore, hMPQArchiveFile, sLocale);
 
         // go through the archive and extract each file
         // ============================================
@@ -246,31 +382,15 @@ void processTheMPQFiles(int iCore, std::string sLocale)
 
     if (iCore == CLIENT_CLASSIC) // Classic
     {
-        processMPQFile("*.dbc", pDBCfolder, sLocale, "./Data/dbc.MPQ");
-        // apply patches
-        processMPQFile("*.dbc", pDBCfolder, sLocale, "./Data/patch.MPQ");
-        processMPQFile("*.dbc", pDBCfolder, sLocale, "./Data/patch-2.MPQ");
+        processMPQFile(iCore, "*.dbc", pDBCfolder, sLocale, "./Data/dbc.MPQ");
     }
 
-    if (iCore >= CLIENT_TBC) // locale in use for folder and file name
+    if (iCore >= CLIENT_TBC && iCore <= CLIENT_MOP) // locale in use for folder and file name
     {
-        processMPQFile("*.dbc", pDBCfolder, sLocale, "./Data/" + sLocale + "/locale-" + sLocale + ".MPQ");
-    }
-
-    std::cout << std::endl << std::endl << std::endl << std::endl << std::endl << std::endl;
-
-    if (iCore >= CLIENT_TBC && iCore <= CLIENT_WOTLK)
-    {
-        // apply patches
-        processMPQFile("*.dbc", pDBCfolder, sLocale, "./Data/" + sLocale + "/patch-" + sLocale + ".MPQ");
-        processMPQFile("*.dbc", pDBCfolder, sLocale, "./Data/" + sLocale + "/patch-" + sLocale + "-2.MPQ");
-    }
-
-    std::cout << std::endl << std::endl << std::endl << std::endl << std::endl << std::endl;
-
-    if (iCore == CLIENT_WOTLK)
-    {
-        processMPQFile("*.dbc", pDBCfolder, sLocale, "./Data/" + sLocale + "/patch-" + sLocale + "-3.MPQ");
+        // dbc files
+        processMPQFile(iCore, "*.dbc", pDBCfolder, sLocale, "./Data/" + sLocale + "/locale-" + sLocale + ".MPQ");
+        // db2 files
+        processMPQFile(iCore, "*.db2", pDBCfolder, sLocale, "./Data/" + sLocale + "/locale-" + sLocale + ".MPQ");
     }
 
     // process MAP files
